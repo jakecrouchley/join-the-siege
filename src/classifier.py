@@ -8,7 +8,7 @@ def classify_file(file: ProcessedFile):
     model = SentenceTransformer(Config.model)
     
     label_keywords = Config.label_keywords
-    
+
     # Generate embeddings for candidate labels
     candidate_labels = list(label_keywords.keys())
     label_embeddings = model.encode(candidate_labels)
