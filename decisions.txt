@@ -1,0 +1,9 @@
+Approach:
+- Find a pre-trained model
+- Use that to classify document contents based on labels
+
+
+Choice of approach:
+- Zero-shot classification
+  - Chosen because it allows a more straightforward implementation
+  - Allows for dynamic labelling, allowing scaling to other industries, at the cost of lower accuracy and no opportunity to fine-tune

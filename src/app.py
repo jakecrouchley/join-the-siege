@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from transformers import pipeline
 
 from src.classifier import classify_file
 app = Flask(__name__)
@@ -26,4 +27,5 @@ def classify_file_route():
 
 
 if __name__ == '__main__':
+    # pipeline("zero-shot-classification", model="facebook/bart-large-mnli", local_files_only=True) # Load the model once at startup
     app.run(debug=True)
