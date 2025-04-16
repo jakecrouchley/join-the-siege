@@ -16,3 +16,9 @@ Choice of approach:
   - more ability to do basic fine-tuning
   - more semantic similarity
   - smaller model size
+
+Missing features:
+
+- Investigate caching to determine whether pip packages can be cached in GitHub actions
+- More tests to cover outcomes of classification
+-

@@ -7,7 +7,7 @@ on:
 env:
   AWS_REGION: us-east-1
   ECR_REPOSITORY: random/herondata
-  ECS_SERVICE: HeronClassifier
+  ECS_SERVICE: HeronService
   ECS_CLUSTER: HeronCluster
   ECS_TASK_DEFINITION: .aws/task-definition.json
   CONTAINER_NAME: herondata
