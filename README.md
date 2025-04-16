@@ -1,76 +1,67 @@
-# Heron Coding Challenge - File Classifier
+# Heron Coding Challenge - File Classifier - Jake Crouchley
 
 ## Overview
-
-At Heron, we’re using AI to automate document processing workflows in financial services and beyond. Each day, we handle over 100,000 documents that need to be quickly identified and categorised before we can kick off the automations.
-
-This repository provides a basic endpoint for classifying files by their filenames. However, the current classifier has limitations when it comes to handling poorly named files, processing larger volumes, and adapting to new industries effectively.
-
-**Your task**: improve this classifier by adding features and optimisations to handle (1) poorly named files, (2) scaling to new industries, and (3) processing larger volumes of documents.
-
-This is a real-world challenge that allows you to demonstrate your approach to building innovative and scalable AI solutions. We’re excited to see what you come up with! Feel free to take it in any direction you like, but we suggest:
-
 
 ### Part 1: Enhancing the Classifier
 
 - What are the limitations in the current classifier that's stopping it from scaling?
+
+Since the original classifier was based on filenames, it required strict file naming and a degree of pre-processing of any files that weren't provided well-named.
+
+Because the logic was fairly simple, there wasn't a huge need for much supporting classes and helpers functions, but as complexity was added I've structured classes to help condense the file validation logic in one place. I've chosen to make a distinction between Unprocessed and Processed files, to differentiate between the two states since the 'processing' of extracting text might not be something you would want to do immediately, particularly if the project is extended to support batch requests.
+
 - How might you extend the classifier with additional technologies, capabilities, or features?
 
+My approach was to leverage pre-trained models that can provide semantic similarity to class labels, but also with some degree of basic fine-tuning through an additional comparison with keywords.
 
-### Part 2: Productionising the Classifier 
+I originally looked into zero shot classification with a larger-sized model but the results without any fine-tuning were sub-par after some manual testing. Instead, I went with SentenceTransformers and a keyword-based comparison that provided a higher degree of accuracy with a much smaller model required.
+
+Further improvements would be to train or fine-tune a model directly from data that Heron has available in order to reach a higher level of accuracy. In terms of testing, it would be good to cover expected cases of classification and ensuring the threshold is valid, for example.
+
+### Part 2: Productionising the Classifier
 
 - How can you ensure the classifier is robust and reliable in a production environment?
+
+By using Docker we can ensure that the classifier is easily replicated in different environments, and can easily be deployed via a number of cloud options.
+
+Missing feature: running a production server instance, currently the application still runs with the development server.
+
 - How can you deploy the classifier to make it accessible to other services and users?
 
-We encourage you to be creative! Feel free to use any libraries, tools, services, models or frameworks of your choice
+I integrated the project with a CI/CD pipeline in Github Actions that builds and uploads the Dockerised container to ECR and ECS. This could be deployed with a load balancer and an API gateway to provide a scalable and accessible means of access to the service.
 
-### Possible Ideas / Suggestions
-- Train a classifier to categorize files based on the text content of a file
-- Generate synthetic data to train the classifier on documents from different industries
-- Detect file type and handle other file formats (e.g., Word, Excel)
-- Set up a CI/CD pipeline for automatic testing and deployment
-- Refactor the codebase to make it more maintainable and scalable
+Missing feature: opportunities for better caching behaviour in the install step.
 
-## Marking Criteria
-- **Functionality**: Does the classifier work as expected?
-- **Scalability**: Can the classifier scale to new industries and higher volumes?
-- **Maintainability**: Is the codebase well-structured and easy to maintain?
-- **Creativity**: Are there any innovative or creative solutions to the problem?
-- **Testing**: Are there tests to validate the service's functionality?
-- **Deployment**: Is the classifier ready for deployment in a production environment?
+## Getting Started (unchanged)
 
-
-## Getting Started
 1. Clone the repository:
-    ```shell
-    git clone <repository_url>
-    cd heron_classifier
-    ```
+
+   ```shell
+   git clone <repository_url>
+   cd heron_classifier
+   ```
 
 2. Install dependencies:
-    ```shell
-    python -m venv venv
-    source venv/bin/activate
-    pip install -r requirements.txt
-    ```
+
+   ```shell
+   python -m venv venv
+   source venv/bin/activate
+   pip install -r requirements.txt
+   ```
 
 3. Run the Flask app:
-    ```shell
-    python -m src.app
-    ```
+
+   ```shell
+   python -m src.app
+   ```
 
 4. Test the classifier using a tool like curl:
-    ```shell
-    curl -X POST -F 'file=@path_to_pdf.pdf' http://127.0.0.1:5000/classify_file
-    ```
+
+   ```shell
+   curl -X POST -F 'file=@path_to_pdf.pdf' http://127.0.0.1:5000/classify_file
+   ```
 
 5. Run tests:
    ```shell
     pytest
-    ```
-
-## Submission
-
-Please aim to spend 3 hours on this challenge.
-
-Once completed, submit your solution by sharing a link to your forked repository. Please also provide a brief write-up of your ideas, approach, and any instructions needed to run your solution. 
+   ```
